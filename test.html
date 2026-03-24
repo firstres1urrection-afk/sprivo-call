@@ -1,0 +1,9 @@
+<!doctype html>
+<html><body>
+<script>
+const phone=new URL(location).searchParams.get('phone')||'01000000000';
+fetch('/api/call',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone})})
+.then(r=>r.json()).then(r=>console.log(r)).catch(console.error);
+</script>
+<p>POST to /api/call with ?phone=... param.</p>
+</body></html>
