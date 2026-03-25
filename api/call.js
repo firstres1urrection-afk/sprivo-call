@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const from = process.env.SOLAPI_FROM
 
   const to = String(phone).replace(/-/g, '')
-  const text = '현재 해외 체류 중입니다. 문자로 연락 부탁드립니다.'
+  const text = req.body?.message || '현재 해외 체류 중입니다. 문자로 연락 부탁드립니다.'
 
   console.log('📞 전화 감지:', phone)
 
