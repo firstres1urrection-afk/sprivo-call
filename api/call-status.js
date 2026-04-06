@@ -149,7 +149,7 @@ try {
     const providerStatusUpper = String(providerStatus || "").toUpperCase();
 
     const isPending =
-      pendingStatuses.has(providerStatusUpper) ||
+      sentSuccess === 0 && sentFailed === 0 && pendingStatuses.has(providerStatusUpper) ||
       (!successStatuses.has(providerStatusUpper) && !failStatuses.has(providerStatusUpper) && sentSuccess === 0 && sentFailed === 0);
 
     const isSuccess =
