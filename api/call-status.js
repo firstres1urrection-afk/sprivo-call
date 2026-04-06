@@ -96,7 +96,9 @@ try {
 
     const providerStatus = data?.status ?? data?.data?.status ?? null;
     const dateCompleted = data?.dateCompleted ?? data?.data?.dateCompleted ?? null;
-    const count = data?.count ?? data?.data?.count ?? {};
+    
+  const dateCreated = data?.dateCreated ?? data?.data?.dateCreated ?? null;
+const dateUpdated = data?.dateUpdated ?? data?.data?.dateUpdated ?? null;const count = data?.count ?? data?.data?.count ?? {};
     const sentSuccess = Number(count?.sentSuccess ?? count?.sent ?? 0);
     const sentFailed = Number(count?.sentFailed ?? count?.failed ?? count?.fail ?? 0);
 
@@ -141,6 +143,27 @@ try {
         })
       );
     }
+
+  const staleBaseTime = dateUpdated || dateCreated || null;
+const staleAgeMs =
+  staleBaseTime && !Number.isNaN(Date.parse(staleBaseTime))
+    ? Date.now() - Date.parse(staleBaseTime)
+    : null;
+
+if (sentSuccess === 0 && sentFailed === 0 && dateCompleted == null && staleAgeMs !== null && staleAgeMs >= 10 * 60 * 1000) {
+  return res.status(200).json(
+    createResponse({
+      success: false,
+      status: "fail",
+      reason: "STALE_PENDING_TIMEOUT",
+      groupId,
+      providerStatus,
+      sentSuccess,
+      sentFailed,
+      dateCompleted: null,
+    })
+  );
+}
 
     const pendingStatuses = new Set(["SENDING", "PENDING", "WAITING", "QUEUED"]);
     const successStatuses = new Set(["COMPLETE", "COMPLETED", "DONE", "FINISH", "FINISHED"]);
